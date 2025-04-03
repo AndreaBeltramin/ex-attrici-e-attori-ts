@@ -88,3 +88,26 @@ async function getActress(id: number): Promise<Actress | null> {
 		return null;
 	}
 }
+
+async function getAllActresses(): Promise<Actress[] | []> {
+	try {
+		const response = await fetch(
+			"https://boolean-spec-frontend.vercel.app/freetestapi/actresses"
+		);
+		if (!response.ok) {
+			throw new Error(`Errore HTTP ${response.status}: ${response.statusText}`);
+		}
+		const dati: unknown = await response.json();
+		if (dati && dati instanceof Array) {
+			return dati;
+		}
+		throw new Error("Formato dei dati non corretto");
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error("Errore nel recupero dei dati: ", error.message);
+		} else {
+			console.error("Erorre sconosciuto: ", error);
+		}
+		return [];
+	}
+}
