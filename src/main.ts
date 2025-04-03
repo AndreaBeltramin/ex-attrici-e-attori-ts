@@ -89,7 +89,7 @@ async function getActress(id: number): Promise<Actress | null> {
 	}
 }
 
-async function getAllActresses(): Promise<Actress[] | []> {
+async function getAllActresses(): Promise<Actress[]> {
 	try {
 		const response = await fetch(
 			"https://boolean-spec-frontend.vercel.app/freetestapi/actresses"
@@ -98,10 +98,11 @@ async function getAllActresses(): Promise<Actress[] | []> {
 			throw new Error(`Errore HTTP ${response.status}: ${response.statusText}`);
 		}
 		const dati: unknown = await response.json();
-		if (dati && dati instanceof Array) {
-			return dati;
+		if (!(dati instanceof Array)) {
+			throw new Error("Formato dei dati non corretto");
 		}
-		throw new Error("Formato dei dati non corretto");
+		const attriciValide: Actress[] = dati.filter(isActress);
+		return attriciValide;
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error("Errore nel recupero dei dati: ", error.message);
