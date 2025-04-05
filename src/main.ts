@@ -127,3 +127,24 @@ async function getActresses(ids: number[]): Promise<(Actress | null)[]> {
 		return [];
 	}
 }
+
+function createRandomId() {
+	const numeroCasuale = Math.floor(Math.random() * 1000);
+	return numeroCasuale;
+}
+
+function createActress(data: Omit<Actress, "id">): Actress {
+	return {
+		...data,
+		id: createRandomId(),
+	};
+}
+
+function updateActress(actress: Actress, updates: Partial<Actress>): Actress {
+	return {
+		...actress,
+		...updates,
+		id: actress.id,
+		name: actress.name,
+	};
+}
